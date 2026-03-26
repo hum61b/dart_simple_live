@@ -936,7 +936,7 @@ Widget _buildFollowListForDialog(LiveRoomController controller) {
 Widget _buildHistoryListForDialog(LiveRoomController controller) {
   var historyList = DBService.instance.getHistores();
   return ListView.builder(
-    itemCount: historyList.length,
+    itemCount: min(historyList.length, 20),
     itemBuilder: (_, i) {
       var item = historyList[i];
       var itemSite = Sites.allSites[item.siteId];

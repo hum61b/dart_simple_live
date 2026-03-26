@@ -911,7 +911,7 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
   Widget _buildHistoryListView() {
     var historyList = DBService.instance.getHistores();
     return ListView.builder(
-      itemCount: historyList.length,
+      itemCount: min(historyList.length, 20),
       itemBuilder: (_, i) {
         var item = historyList[i];
         var itemSite = Sites.allSites[item.siteId];
