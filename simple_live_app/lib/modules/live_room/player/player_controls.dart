@@ -863,30 +863,42 @@ void showFollowUser(LiveRoomController controller) {
     useSystem: true,
     child: DefaultTabController(
       length: 2,
-      initialIndex: 0,
-      child: Column(
-        children: [
-          TabBar(
-            indicatorSize: TabBarIndicatorSize.tab,
-            labelPadding: EdgeInsets.zero,
-            indicatorWeight: 1.0,
-            onTap: (index) {
-              // controller.showFollowList.value = index == 0;
-            },
-            tabs: const [
-              Tab(text: "关注列表"),
-              Tab(text: "观看历史"),
+      initialIndex: controller.showFollowList.value ? 0 : 1,
+      // 👇 只加这一层，完全不改动你原来的结构！
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          // 获取 TabController
+          final tabCtrl = DefaultTabController.of(context);
+          // 监听滑动 + 点击
+          tabCtrl.addListener(() {
+            if (!tabCtrl.indexIsChanging) {
+              controller.showFollowList.value = tabCtrl.index == 0;
+            }
+          });
+          return Column(
+            children: [
+              TabBar(
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelPadding: EdgeInsets.zero,
+                indicatorWeight: 1.0,
+                onTap: (index) {
+                },
+                tabs: const [
+                  Tab(text: "关注列表"),
+                  Tab(text: "观看历史"),
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    _buildFollowListForDialog(controller),
+                    _buildHistoryListForDialog(controller),
+                  ],
+                ),
+              ),
             ],
-          ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                _buildFollowListForDialog(controller),
-                _buildHistoryListForDialog(controller),
-              ],
-            ),
-          ),
-        ],
+          );
+        },
       ),
     ),
   );
@@ -999,12 +1011,14 @@ class PlayerSuperChatCard extends StatefulWidget {
   final LiveSuperChatMessage message;
   final VoidCallback onExpire;
   final int duration;
+
   const PlayerSuperChatCard(
       {required this.message,
       required this.onExpire,
       required this.duration,
       Key? key})
       : super(key: key);
+
   @override
   State<PlayerSuperChatCard> createState() => _PlayerSuperChatCardState();
 }
@@ -1012,6 +1026,7 @@ class PlayerSuperChatCard extends StatefulWidget {
 class _PlayerSuperChatCardState extends State<PlayerSuperChatCard> {
   late Timer timer;
   late int countdown;
+
   @override
   void initState() {
     super.initState();
@@ -1051,13 +1066,16 @@ class LocalDisplaySC {
   final LiveSuperChatMessage sc;
   final DateTime expireAt;
   final int duration;
+
   LocalDisplaySC(this.sc, this.expireAt, this.duration);
 }
 
 class PlayerSuperChatOverlay extends StatefulWidget {
   final LiveRoomController controller;
+
   const PlayerSuperChatOverlay({required this.controller, Key? key})
       : super(key: key);
+
   @override
   State<PlayerSuperChatOverlay> createState() => _PlayerSuperChatOverlayState();
 }

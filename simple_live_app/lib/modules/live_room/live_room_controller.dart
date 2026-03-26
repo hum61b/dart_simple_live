@@ -110,7 +110,7 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
   Timer? _liveDurationTimer;
 
   /// 关注/历史列表切换状态 (true: 关注列表, false: 观看历史)
-  // var showFollowList = true.obs;
+  var showFollowList = true.obs;
 
   @override
   void onInit() {
@@ -837,32 +837,40 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
       title: "",
       child: DefaultTabController(
         length: 2,
-        initialIndex: 0,
-        child: Column(
-          children: [
-            TabBar(
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelPadding: EdgeInsets.zero,
-              indicatorWeight: 1.0,
-              onTap: (index) {
-                // 不再记住状态
-                // showFollowList.value = index == 0;
-              },
-              tabs: const [
-                Tab(text: "关注列表"),
-                Tab(text: "观看历史"),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  _buildFollowListView(),
-                  _buildHistoryListView(),
+        initialIndex: showFollowList.value ? 0 : 1,
+        child: Builder(builder: (context) {
+          // 取出 TabController 监听滑动
+          final tabCtrl = DefaultTabController.of(context);
+          tabCtrl.addListener(() {
+            if (!tabCtrl.indexIsChanging) {
+              showFollowList.value = tabCtrl.index == 0;
+            }
+          });
+
+          return Column(
+            children: [
+              TabBar(
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelPadding: EdgeInsets.zero,
+                indicatorWeight: 1.0,
+                onTap: (index) {
+                },
+                tabs: const [
+                  Tab(text: "关注列表"),
+                  Tab(text: "观看历史"),
                 ],
               ),
-            ),
-          ],
-        ),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    _buildFollowListView(),
+                    _buildHistoryListView(),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
