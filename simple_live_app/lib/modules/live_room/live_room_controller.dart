@@ -110,7 +110,7 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
   Timer? _liveDurationTimer;
 
   /// 关注/历史列表切换状态 (true: 关注列表, false: 观看历史)
-  var showFollowList = true.obs;
+  // var showFollowList = true.obs;
 
   @override
   void onInit() {
@@ -837,7 +837,7 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
       title: "",
       child: DefaultTabController(
         length: 2,
-        initialIndex: showFollowList.value ? 0 : 1,
+        initialIndex: 0,
         child: Column(
           children: [
             TabBar(
@@ -845,7 +845,8 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
               labelPadding: EdgeInsets.zero,
               indicatorWeight: 1.0,
               onTap: (index) {
-                showFollowList.value = index == 0;
+                // 不再记住状态
+                // showFollowList.value = index == 0;
               },
               tabs: const [
                 Tab(text: "关注列表"),

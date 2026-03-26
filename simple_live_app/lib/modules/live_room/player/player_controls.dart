@@ -863,7 +863,7 @@ void showFollowUser(LiveRoomController controller) {
     useSystem: true,
     child: DefaultTabController(
       length: 2,
-      initialIndex: controller.showFollowList.value ? 0 : 1,
+      initialIndex: 0,
       child: Column(
         children: [
           TabBar(
@@ -871,7 +871,7 @@ void showFollowUser(LiveRoomController controller) {
             labelPadding: EdgeInsets.zero,
             indicatorWeight: 1.0,
             onTap: (index) {
-              controller.showFollowList.value = index == 0;
+              // controller.showFollowList.value = index == 0;
             },
             tabs: const [
               Tab(text: "关注列表"),
