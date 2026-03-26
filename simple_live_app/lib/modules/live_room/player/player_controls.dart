@@ -864,7 +864,6 @@ void showFollowUser(LiveRoomController controller) {
     child: DefaultTabController(
       length: 2,
       initialIndex: controller.showFollowList.value ? 0 : 1,
-      // 👇 只加这一层，完全不改动你原来的结构！
       child: StatefulBuilder(
         builder: (context, setState) {
           // 获取 TabController
