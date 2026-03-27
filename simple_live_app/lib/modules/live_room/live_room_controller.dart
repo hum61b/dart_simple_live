@@ -29,6 +29,7 @@ import 'package:simple_live_app/widgets/net_image.dart';
 import 'package:simple_live_core/simple_live_core.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:simple_live_app/app/services/audio_service.dart';
 
 class LiveRoomController extends PlayerController with WidgetsBindingObserver {
   final Site pSite;
@@ -336,6 +337,11 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
       initDanmau();
       liveDanmaku.start(detail.value?.danmakuData);
       startLiveDurationTimer(); // 启动开播时长定时器
+
+      // 初始化后台服务
+      if (Platform.isAndroid && detail.value != null) {
+        globalAudioHandler?.attachPlayer(player, detail.value!.title, detail.value!.userName);
+      }
     } catch (e) {
       Log.logPrint(e);
       //SmartDialog.showToast(e.toString());
@@ -1173,6 +1179,12 @@ ${error?.stackTrace}''');
     liveDanmaku.stop();
     danmakuController = null;
     _liveDurationTimer?.cancel(); // 页面关闭时取消定时器
+    
+    // 停止后台服务
+    if (Platform.isAndroid && globalAudioHandler != null) {
+      globalAudioHandler?.stop();
+    }
+
     super.onClose();
   }
 }

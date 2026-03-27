@@ -35,12 +35,19 @@ import 'package:window_manager/window_manager.dart';
 
 import 'package:path/path.dart' as p;
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:simple_live_app/app/services/audio_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await migrateData();
   await initWindow();
   MediaKit.ensureInitialized();
+  
+  // Initialize Audio Service for Android
+  if (Platform.isAndroid) {
+    await initAudioServiceGlobal();
+  }
+
   await Hive.initFlutter(
     (!Platform.isAndroid && !Platform.isIOS)
         ? (await getApplicationSupportDirectory()).path
