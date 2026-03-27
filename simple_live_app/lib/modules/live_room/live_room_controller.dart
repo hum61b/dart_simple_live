@@ -340,7 +340,7 @@ class LiveRoomController extends PlayerController with WidgetsBindingObserver {
 
       // 初始化后台服务
       if (Platform.isAndroid && detail.value != null) {
-        globalAudioHandler?.attachPlayer(player, detail.value!.title, detail.value!.userName);
+        globalAudioHandler?.attachPlayer(player, detail.value!.title, detail.value!.userName, detail.value!.userAvatar);
       }
     } catch (e) {
       Log.logPrint(e);

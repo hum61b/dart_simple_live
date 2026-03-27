@@ -18,7 +18,7 @@ class SimpleLiveAudioHandler extends BaseAudioHandler {
     _updatePlaybackState();
   }
 
-  void attachPlayer(Player player, String title, String artist) {
+  void attachPlayer(Player player, String title, String artist, artStr ) {
     _detachPlayer();
     _player = player;
 
@@ -27,6 +27,7 @@ class SimpleLiveAudioHandler extends BaseAudioHandler {
       album: 'Simple Live',
       title: title,
       artist: artist,
+      artUri: artStr.isNotEmpty ? Uri.parse(artStr) : null,
     ));
 
     _subscriptions.add(_player!.stream.playing.listen((_) => _updatePlaybackState()));
@@ -53,13 +54,13 @@ class SimpleLiveAudioHandler extends BaseAudioHandler {
     playbackState.add(PlaybackState(
       controls: [
         if (playing) MediaControl.pause else MediaControl.play,
-        MediaControl.stop,
+        // MediaControl.stop,
       ],
       systemActions: const {
         MediaAction.playPause,
-        MediaAction.stop,
+        // MediaAction.stop,
       },
-      androidCompactActionIndices: const [0, 1],
+      androidCompactActionIndices: const [0],
       processingState: buffering
           ? AudioProcessingState.buffering
           : playing
